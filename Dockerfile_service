@@ -1,0 +1,19 @@
+FROM python:3.11.7-slim-bullseye AS base
+
+WORKDIR /db-creation-service
+RUN apt-get update && \
+    apt-get install -y git curl wget openssl unzip && \
+    apt-get install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev && \
+    apt-get clean autoclean && \
+    apt-get autoremove --yes
+
+# RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" \
+#     && chmod +x ./kubectl \
+#     && mv ./kubectl /usr/local/bin/kubectl \
+#     && curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
+#     && chmod +x get_helm.sh && ./get_helm.sh && rm ./get_helm.sh
+
+RUN pip install GitPython Flask==3.0.2 kubernetes requests
+COPY hello_service.py hello_service.py
+EXPOSE 8080/tcp
+CMD ["python3", "./hello_service.py"]
