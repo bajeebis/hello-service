@@ -1,19 +1,19 @@
 from flask import Flask, request, jsonify
+from git import Repo
 import logging as log
 import os, subprocess, json, yaml, logging as log
 from threading import Thread
-from kubernetes import client, config
 
 # Set ENV vars
 DEBUG_LEVEL = os.getenv('DEBUG_LEVEL')
 if DEBUG_LEVEL == 'DEBUG':
     DEBUG_BOOL = True
     LOG_LEVEL = log.DEBUG
+    HELM_LEVEL = ' --dry-run'
 if DEBUG_LEVEL == 'INFO':
     DEBUG_BOOL = False
     LOG_LEVEL = log.INFO
-# def debug_level(level):
-#     info_dict
+    HELM_LEVEL = ''
 
 log.basicConfig(
     # filename=time.strftime('%I%p')+'-flask_app.log',
@@ -21,7 +21,6 @@ log.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     handlers=[log.StreamHandler()]
 )
-
 
 class NoHealth(log.Filter):
     def filter(self, record):
