@@ -13,7 +13,7 @@ RUN apt-get update && \
 #     && curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
 #     && chmod +x get_helm.sh && ./get_helm.sh && rm ./get_helm.sh
 
-RUN pip install GitPython Flask==3.0.2 kubernetes requests
+RUN pip install requirements.txt
 COPY hello_service.py hello_service.py
 EXPOSE 8080/tcp
 CMD ["python3", "./hello_service.py"]
